@@ -1,0 +1,26 @@
+<script>
+    const input = document.getElementById('urlInput');
+    const viewer = document.getElementById('viewer');
+    const hero = document.getElementById('hero');
+
+    input.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            let url = input.value.trim();
+            if (!url.startsWith('http')) url = 'https://' + url;
+
+            hero.style.display = 'none';
+            viewer.style.display = 'block';
+
+            // This uses a 'CORS Anywhere' bridge to help bypass frame blocks
+            // Note: If a site still won't load, it's because they have high security.
+            const proxyUrl = "https://thingproxy.freeboard.io/fetch/" + url;
+            
+            viewer.src = proxyUrl; 
+            
+            // If the proxy fails, we try a direct load as a backup
+            viewer.onerror = function() {
+                viewer.src = url;
+            };
+        }
+    });
+</script>
